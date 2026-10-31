@@ -1,0 +1,12 @@
+{
+  "name": "Korean Coach",
+  "short_name": "Korean Coach",
+  "description": "Apprends le coréen à l'oral et à l'écrit avec les K-dramas.",
+  "start_url": "./#accueil",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F5F7",
+  "theme_color": "#B4233C",
+  "lang": "fr",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
