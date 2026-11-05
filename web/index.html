@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Korean Coach</title>
+<meta name="description" content="Apprends le coréen à l’oral et à l’écrit avec les K-dramas : parcours guidé, écoute, prononciation, vocabulaire. Gratuit, sans compte.">
+<meta name="theme-color" content="#B4233C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a class="skip" href="#view">Aller au contenu</a>
+<div class="shell">
+  <aside class="side">
+    <a class="brand" href="#accueil"><span class="brand-mark" aria-hidden="true" lang="ko">한</span><span>Korean Coach</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#accueil" data-nav="accueil"></a>
+      <a href="#parcours" data-nav="parcours"></a>
+      <a href="#ecouter" data-nav="ecouter"></a>
+      <a href="#parler" data-nav="parler"></a>
+      <a href="#mots" data-nav="mots"></a>
+      <a href="#coach" data-nav="coach"></a>
+      <a href="#reglages" data-nav="reglages" class="nav-settings"></a>
+    </nav>
+    <div class="model-status" id="model-status" aria-live="polite"></div>
+  </aside>
+  <main id="view" tabindex="-1"></main>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+<noscript><p class="wrap">Korean Coach a besoin de JavaScript.</p></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
