@@ -4,6 +4,8 @@ Apprendre le coréen **de zéro jusqu’au niveau A2**, à l’oral comme à l�
 
 Site : https://nthimotte8.github.io/KoreanCoach/ (Chrome ou Edge sur ordinateur, conseillé).
 
+Version iPhone (légère, une seule page) : https://nthimotte8.github.io/KoreanCoach/iphone/ : hangeul, 33 expressions de dramas, quiz et oral. À ouvrir dans Safari puis « Sur l’écran d’accueil ».
+
 Gratuit, sans compte : tout tourne dans le navigateur et la progression reste sur ton ordinateur.
 
 ## Ce qu’il y a dedans

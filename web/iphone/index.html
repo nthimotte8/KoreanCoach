@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="한국어">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fbf7f2">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Korean Coach – 한국어</title>
+<style>
+  :root{
+    --bg:#fbf7f2; --card:#ffffff; --ink:#2b2523; --muted:#8a7f78;
+    --accent:#d9485f; --accent-soft:#fde8eb; --ok:#2f9e6e; --ok-soft:#e3f5ec;
+    --ko:#3b5bdb; --line:#eee5dc; --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  button,.tile,.chip{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  button:active,.tile:active{transform:scale(.97)}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    padding-bottom:calc(90px + env(safe-area-inset-bottom));overscroll-behavior-y:none;}
+  header{padding:calc(14px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 8px calc(20px + env(safe-area-inset-left));}
+  header h1{margin:0;font-size:23px}
+  header h1 span{color:var(--accent)}
+  header p{margin:2px 0 0;color:var(--muted);font-size:13px}
+  main{padding:8px calc(14px + env(safe-area-inset-right)) 8px calc(14px + env(safe-area-inset-left));max-width:680px;margin:0 auto}
+  section{display:none} section.active{display:block}
+  .card{background:var(--card);border-radius:var(--radius);padding:18px;margin:12px 0;
+    box-shadow:0 2px 10px rgba(80,50,30,.06);border:1px solid var(--line)}
+  h2{font-size:19px;margin:18px 4px 6px} h3{margin:0 0 8px;font-size:16px}
+  .muted{color:var(--muted);font-size:14px}
+  .ko{color:var(--ko);font-weight:700}
+  .big-ko{font-size:44px;font-weight:700;color:var(--ko);text-align:center;margin:8px 0}
+  .roman{text-align:center;color:var(--muted);font-style:italic}
+  .fr{text-align:center;font-size:18px;margin-top:6px}
+  button{font:inherit;font-size:16px;border:none;border-radius:14px;padding:14px 16px;min-height:48px;cursor:pointer;color:inherit}
+  .btn{background:var(--accent);color:#fff;font-weight:600}
+  .btn.ghost{background:var(--accent-soft);color:var(--accent)}
+  .btn.full{width:100%}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > *{flex:1}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+  .stat b{display:block;font-size:24px;color:var(--accent)}
+  .stat small{color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  @media (min-width:500px){.grid{grid-template-columns:repeat(6,1fr)}}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer;user-select:none}
+  .tile .j{font-size:30px;font-weight:700;color:var(--ko)}
+  .tile .r{font-size:12px;color:var(--muted)}
+  .tile.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .tile.seen{box-shadow:inset 0 -3px 0 var(--ok)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:15px;min-height:40px}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .phrase{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .phrase:last-child{border-bottom:none}
+  .phrase .t{flex:1}
+  .phrase .t .k{font-size:20px;font-weight:700;color:var(--ko)}
+  .phrase .t .rr{font-size:13px;color:var(--muted);font-style:italic}
+  .phrase .t .ff{font-size:15px}
+  .phrase .t .note{font-size:12px;color:var(--muted);margin-top:2px}
+  .icon{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:18px;padding:0;flex:none}
+  .star{background:none;font-size:24px;padding:4px;min-width:44px;color:#ccc}
+  .star.on{color:#f2b705}
+  .opts{display:grid;gap:10px;margin-top:14px}
+  .opt{background:var(--bg);border:2px solid var(--line);text-align:left;font-size:16px}
+  .opt.good{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.bad{border-color:var(--accent);background:var(--accent-soft)}
+  .feedback{min-height:24px;text-align:center;margin-top:10px;font-weight:600}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+  .builder{display:flex;align-items:center;justify-content:center;gap:10px;font-size:34px;margin:10px 0}
+  .builder .res{font-size:56px;color:var(--ko);font-weight:700;min-width:70px;text-align:center}
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  nav button{flex:1;background:none;padding:6px 2px;min-height:54px;font-size:11px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+  nav button .e{font-size:22px;height:26px;line-height:26px;display:block}
+  nav button.on{color:var(--accent);font-weight:700}
+  .mic{width:84px;height:84px;border-radius:50%;font-size:34px;display:block;margin:16px auto 6px}
+  .mic.listening{animation:pulse 1s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,72,95,.5)}100%{box-shadow:0 0 0 22px rgba(217,72,95,0)}}
+  .tip{background:var(--accent-soft);border-radius:14px;padding:12px 14px;font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Korean Coach <span>한국어</span></h1>
+  <p id="hello">Objectif : comprendre tes dramas sans sous-titres</p>
+</header>
+
+<main>
+
+<!-- ACCUEIL -->
+<section id="home" class="active">
+  <div class="stats">
+    <div class="stat"><b id="sStreak">0</b><small>jours de suite</small></div>
+    <div class="stat"><b id="sLetters">0/26</b><small>lettres vues</small></div>
+    <div class="stat"><b id="sPhrases">0</b><small>expressions sues</small></div>
+  </div>
+
+  <div class="card">
+    <h3>🎬 Expression du jour</h3>
+    <div class="big-ko" id="dayKo"></div>
+    <div class="roman" id="dayRo"></div>
+    <div class="fr" id="dayFr"></div>
+    <p class="muted" id="dayNote" style="text-align:center"></p>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" id="dayListen">🔊 Écouter</button>
+      <button class="btn" id="dayKnow">✓ Je la connais</button>
+    </div>
+  </div>
+
+  <div class="card tip" id="installTip" style="display:none">
+    📲 <b>Mets-la sur ton écran d’accueil :</b> dans Safari, touche <b>Partager</b> ⬆️ puis <b>Sur l’écran d’accueil</b>. Elle s’ouvrira comme une vraie app.
+  </div>
+
+  <h2>Ton parcours</h2>
+  <div class="card">
+    <h3>1. Lire le hangeul</h3>
+    <p class="muted">L'alphabet coréen s'apprend en quelques jours. C'est la base de tout le reste.</p>
+    <div class="bar"><i id="pLetters"></i></div>
+    <button class="btn full" style="margin-top:12px" data-go="hangeul">Commencer</button>
+  </div>
+  <div class="card">
+    <h3>2. Les expressions des dramas</h3>
+    <p class="muted">Les phrases qu'on entend dans tous les K-dramas.</p>
+    <div class="bar"><i id="pPhrases"></i></div>
+    <button class="btn full" style="margin-top:12px" data-go="phrases">Découvrir</button>
+  </div>
+  <div class="card">
+    <h3>3. Te tester et parler</h3>
+    <p class="muted">Quiz rapides, puis répète à voix haute.</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" data-go="quiz">Quiz</button>
+      <button class="btn ghost" data-go="speak">Parler</button>
+    </div>
+  </div>
+  <p class="muted" style="text-align:center;margin:18px 0 6px"><a href="../" style="color:var(--accent)">Version complète (ordinateur) →</a></p>
+</section>
+
+<!-- HANGEUL -->
+<section id="hangeul">
+  <h2>Les voyelles</h2>
+  <p class="muted" style="margin:0 4px">Touche une lettre pour l'entendre. Un trait vert = déjà vue.</p>
+  <div class="card"><div class="grid" id="gVowels"></div></div>
+
+  <h2>Les consonnes</h2>
+  <div class="card"><div class="grid" id="gCons"></div></div>
+
+  <h2>Construis une syllabe</h2>
+  <div class="card">
+    <p class="muted">En coréen, une syllabe = consonne + voyelle. Choisis-en une de chaque.</p>
+    <div class="builder">
+      <span id="bC">ㄱ</span>+<span id="bV">ㅏ</span>=<span class="res" id="bRes">가</span>
+    </div>
+    <div class="roman" id="bRo">ga</div>
+    <button class="btn ghost full" style="margin-top:10px" id="bListen">🔊 Écouter</button>
+    <p class="muted" style="margin-top:14px">Consonne</p>
+    <div class="grid" id="bCons"></div>
+    <p class="muted" style="margin-top:14px">Voyelle</p>
+    <div class="grid" id="bVows"></div>
+  </div>
+
+  <div class="card tip">
+    💡 <b>Astuce :</b> ㅇ ne se prononce pas en début de syllabe. C'est pour ça que 아 se lit « a ». En fin de syllabe, il se prononce « ng » (comme dans 사랑, sa-rang).
+  </div>
+</section>
+
+<!-- EXPRESSIONS -->
+<section id="phrases">
+  <h2>Expressions des dramas</h2>
+  <div class="chips" id="cats"></div>
+  <div class="card" id="pList"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <h2>Quiz</h2>
+  <div class="chips" id="qModes"></div>
+  <div class="card">
+    <div class="muted" id="qScore" style="text-align:right"></div>
+    <div class="big-ko" id="qPrompt"></div>
+    <div class="roman" id="qSub"></div>
+    <button class="btn ghost full" id="qListen" style="margin-top:8px">🔊 Écouter</button>
+    <div class="opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="btn full" id="qNext" style="margin-top:10px;display:none">Suivant →</button>
+  </div>
+</section>
+
+<!-- PARLER -->
+<section id="speak">
+  <h2>Parler</h2>
+  <div class="card">
+    <p class="muted" style="text-align:center">Écoute, puis répète la phrase à voix haute.</p>
+    <div class="big-ko" id="spKo"></div>
+    <div class="roman" id="spRo"></div>
+    <div class="fr" id="spFr"></div>
+    <button class="btn ghost full" id="spListen" style="margin-top:12px">🔊 Écouter (lent)</button>
+    <button class="btn mic" id="spMic">🎤</button>
+    <div class="feedback" id="spFb"></div>
+    <p class="muted" id="spHeard" style="text-align:center"></p>
+    <button class="btn full" id="spNext">Phrase suivante →</button>
+  </div>
+  <div class="card tip" id="spInfo">
+    🎙️ Sur iPhone, utilise <b>Safari</b> et autorise le micro. Si le micro ne réagit pas : Réglages › Siri, active Siri (iOS s’en sert pour la dictée).
+  </div>
+</section>
+
+</main>
+
+<nav>
+  <button data-go="home" class="on"><span class="e">🏠</span>Accueil</button>
+  <button data-go="hangeul"><span class="e">한</span>Hangeul</button>
+  <button data-go="phrases"><span class="e">🎬</span>Expressions</button>
+  <button data-go="quiz"><span class="e">🎯</span>Quiz</button>
+  <button data-go="speak"><span class="e">🎤</span>Parler</button>
+</nav>
+
+<script>
+/* ---------- DONNÉES ---------- */
+const VOWELS = [
+  {j:'ㅏ',r:'a',s:'아'},{j:'ㅑ',r:'ya',s:'야'},{j:'ㅓ',r:'eo',s:'어',n:'entre « o » et « eu »'},
+  {j:'ㅕ',r:'yeo',s:'여'},{j:'ㅗ',r:'o',s:'오'},{j:'ㅛ',r:'yo',s:'요'},
+  {j:'ㅜ',r:'ou',s:'우'},{j:'ㅠ',r:'you',s:'유'},{j:'ㅡ',r:'eu',s:'으'},
+  {j:'ㅣ',r:'i',s:'이'},{j:'ㅐ',r:'è',s:'애'},{j:'ㅔ',r:'é',s:'에'}
+];
+const CONS = [
+  {j:'ㄱ',r:'g/k',s:'가'},{j:'ㄴ',r:'n',s:'나'},{j:'ㄷ',r:'d/t',s:'다'},{j:'ㄹ',r:'r/l',s:'라'},
+  {j:'ㅁ',r:'m',s:'마'},{j:'ㅂ',r:'b/p',s:'바'},{j:'ㅅ',r:'s',s:'사'},{j:'ㅇ',r:'muet/ng',s:'아'},
+  {j:'ㅈ',r:'dj',s:'자'},{j:'ㅊ',r:'tch',s:'차'},{j:'ㅋ',r:'k',s:'카'},{j:'ㅌ',r:'t',s:'타'},
+  {j:'ㅍ',r:'p',s:'파'},{j:'ㅎ',r:'h',s:'하'}
+];
+// Index Unicode pour composer les syllabes
+const L_IDX = {'ㄱ':0,'ㄴ':2,'ㄷ':3,'ㄹ':5,'ㅁ':6,'ㅂ':7,'ㅅ':9,'ㅇ':11,'ㅈ':12,'ㅊ':14,'ㅋ':15,'ㅌ':16,'ㅍ':17,'ㅎ':18};
+const V_IDX = {'ㅏ':0,'ㅐ':1,'ㅑ':2,'ㅓ':4,'ㅔ':5,'ㅕ':6,'ㅗ':8,'ㅛ':12,'ㅜ':13,'ㅠ':17,'ㅡ':18,'ㅣ':20};
+const C_ROM = {'ㄱ':'g','ㄴ':'n','ㄷ':'d','ㄹ':'r','ㅁ':'m','ㅂ':'b','ㅅ':'s','ㅇ':'','ㅈ':'j','ㅊ':'ch','ㅋ':'k','ㅌ':'t','ㅍ':'p','ㅎ':'h'};
+const V_ROM = {'ㅏ':'a','ㅐ':'ae','ㅑ':'ya','ㅓ':'eo','ㅔ':'e','ㅕ':'yeo','ㅗ':'o','ㅛ':'yo','ㅜ':'u','ㅠ':'yu','ㅡ':'eu','ㅣ':'i'};
+
+const PHRASES = [
+  {k:'안녕하세요',r:'annyeonghaseyo',f:'Bonjour',c:'Salutations',n:'Poli, à tout le monde'},
+  {k:'안녕',r:'annyeong',f:'Salut / Au revoir',c:'Salutations',n:'Familier, entre amis'},
+  {k:'감사합니다',r:'gamsahamnida',f:'Merci',c:'Salutations',n:'Poli'},
+  {k:'고마워',r:'gomawo',f:'Merci',c:'Salutations',n:'Familier'},
+  {k:'죄송합니다',r:'joesonghamnida',f:'Je suis vraiment désolé',c:'Salutations',n:'Très poli'},
+  {k:'미안해',r:'mianhae',f:'Désolé',c:'Émotions',n:'Familier, très fréquent dans les dramas'},
+  {k:'네',r:'ne',f:'Oui',c:'Salutations',n:'Poli'},
+  {k:'아니요',r:'aniyo',f:'Non',c:'Salutations',n:'Poli'},
+  {k:'사랑해',r:'saranghae',f:"Je t'aime",c:'Romance',n:'La phrase culte des dramas'},
+  {k:'보고 싶어',r:'bogo sipeo',f:'Tu me manques',c:'Romance',n:'Littéralement : « je veux te voir »'},
+  {k:'좋아해',r:'joahae',f:"Je t'aime bien / Tu me plais",c:'Romance',n:'La déclaration avant « saranghae »'},
+  {k:'가지 마',r:'gaji ma',f:"Ne pars pas",c:'Romance',n:'Scène de fin d’épisode classique'},
+  {k:'괜찮아?',r:'gwaenchana?',f:'Ça va ? Tu vas bien ?',c:'Émotions',n:'Intonation montante'},
+  {k:'괜찮아',r:'gwaenchana',f:"Ça va / Ce n'est rien",c:'Émotions',n:''},
+  {k:'진짜?',r:'jinjja?',f:'Vraiment ? Sérieux ?',c:'Réactions',n:''},
+  {k:'대박',r:'daebak',f:'Génial ! Incroyable !',c:'Réactions',n:'Argot, ultra courant'},
+  {k:'헐',r:'heol',f:'Quoi ?! (choc)',c:'Réactions',n:'Argot'},
+  {k:'뭐?',r:'mwo?',f:'Quoi ?',c:'Réactions',n:'Familier'},
+  {k:'어떡해',r:'eotteokae',f:'Oh non… Je fais quoi ?',c:'Émotions',n:'Quand tout part de travers'},
+  {k:'아니야',r:'aniya',f:"Non / Ce n'est pas ça",c:'Réactions',n:'Familier'},
+  {k:'몰라',r:'molla',f:'Je ne sais pas',c:'Réactions',n:'Familier, souvent boudeur'},
+  {k:'알았어',r:'arasseo',f:"D'accord, compris",c:'Réactions',n:'Familier'},
+  {k:'잠깐만',r:'jamkkanman',f:'Attends une seconde',c:'Quotidien',n:''},
+  {k:'가자',r:'gaja',f:'Allons-y',c:'Quotidien',n:''},
+  {k:'빨리',r:'ppalli',f:'Vite !',c:'Quotidien',n:'« Ppalli ppalli » = dépêche-toi'},
+  {k:'배고파',r:'baegopa',f:"J'ai faim",c:'Quotidien',n:''},
+  {k:'하지 마',r:'haji ma',f:'Arrête ! Ne fais pas ça',c:'Émotions',n:''},
+  {k:'화이팅',r:'hwaiting',f:'Courage ! Allez !',c:'Quotidien',n:'Vient de l\'anglais « fighting »'},
+  {k:'오빠',r:'oppa',f:'Grand frère (dit par une fille)',c:'Relations',n:'Aussi pour un petit ami plus âgé'},
+  {k:'언니',r:'eonni',f:'Grande sœur (dit par une fille)',c:'Relations',n:''},
+  {k:'형',r:'hyeong',f:'Grand frère (dit par un garçon)',c:'Relations',n:''},
+  {k:'누나',r:'nuna',f:'Grande sœur (dit par un garçon)',c:'Relations',n:''},
+  {k:'선배',r:'seonbae',f:'Aîné (école, travail)',c:'Relations',n:'Très fréquent dans les dramas de bureau'}
+];
+
+/* ---------- STOCKAGE (sécurisé) ---------- */
+const KEY='koreanCoach_v1';
+let S = {letters:[],known:[],fav:[],quizOk:0,quizTotal:0,days:[],};
+try{ const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw)); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+
+function today(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function markDay(){ const t=today(); if(!S.days.includes(t)){ S.days.push(t); save(); } }
+function streak(){
+  let n=0; const d=new Date();
+  while(true){
+    const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    if(S.days.includes(k)){ n++; d.setDate(d.getDate()-1); } else break;
+  }
+  return n;
+}
+
+/* ---------- VOIX ---------- */
+let koVoice=null;
+function pickVoice(){
+  if(!('speechSynthesis' in window)) return;
+  const v=speechSynthesis.getVoices();
+  koVoice=v.find(x=>x.lang && x.lang.toLowerCase().startsWith('ko'))||null;
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+function say(text,rate){
+  if(!('speechSynthesis' in window)){ alertSoft('Ton navigateur ne peut pas lire l’audio.'); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ko-KR'; u.rate=rate||0.85; if(koVoice) u.voice=koVoice;
+  speechSynthesis.speak(u);
+}
+function alertSoft(msg){ const fb=document.getElementById('qFb'); if(fb) fb.textContent=msg; }
+
+/* ---------- NAVIGATION ---------- */
+function go(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('active',s.id===id));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+  window.scrollTo(0,0);
+  if(id==='home') renderHome();
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+
+/* ---------- ACCUEIL ---------- */
+function dayPhrase(){
+  const d=new Date(); const n=Math.floor(d.getTime()/86400000);
+  return PHRASES[n%PHRASES.length];
+}
+function renderHome(){
+  const total=VOWELS.length+CONS.length;
+  document.getElementById('sStreak').textContent=streak();
+  document.getElementById('sLetters').textContent=S.letters.length+'/'+total;
+  document.getElementById('sPhrases').textContent=S.known.length;
+  document.getElementById('pLetters').style.width=(S.letters.length/total*100)+'%';
+  document.getElementById('pPhrases').style.width=(S.known.length/PHRASES.length*100)+'%';
+  const p=dayPhrase();
+  dayKo.textContent=p.k; dayRo.textContent=p.r; dayFr.textContent=p.f; dayNote.textContent=p.n||'';
+  dayKnow.textContent=S.known.includes(p.k)?'✓ Connue':'✓ Je la connais';
+}
+dayListen.onclick=()=>{ say(dayPhrase().k); markDay(); };
+dayKnow.onclick=()=>{ const k=dayPhrase().k; if(!S.known.includes(k)) S.known.push(k); markDay(); save(); renderHome(); };
+
+/* ---------- HANGEUL ---------- */
+function tile(item,onClick,extraClass){
+  const t=document.createElement('div');
+  t.className='tile '+(extraClass||'');
+  t.innerHTML='<div class="j">'+item.j+'</div><div class="r">'+item.r+'</div>';
+  t.onclick=()=>onClick(t);
+  return t;
+}
+function renderLetters(){
+  [['gVowels',VOWELS],['gCons',CONS]].forEach(([id,list])=>{
+    const g=document.getElementById(id); g.innerHTML='';
+    list.forEach(it=>{
+      g.appendChild(tile(it,(el)=>{
+        say(it.s,0.7);
+        if(!S.letters.includes(it.j)){ S.letters.push(it.j); save(); }
+        el.classList.add('seen'); markDay();
+      }, S.letters.includes(it.j)?'seen':''));
+    });
+  });
+}
+let bC='ㄱ', bV='ㅏ';
+function compose(c,v){ return String.fromCharCode(0xAC00+(L_IDX[c]*21+V_IDX[v])*28); }
+function renderBuilder(){
+  document.getElementById('bC').textContent=bC;
+  document.getElementById('bV').textContent=bV;
+  document.getElementById('bRes').textContent=compose(bC,bV);
+  document.getElementById('bRo').textContent=C_ROM[bC]+V_ROM[bV];
+  const gc=document.getElementById('bCons'), gv=document.getElementById('bVows');
+  gc.innerHTML=''; gv.innerHTML='';
+  CONS.forEach(it=>gc.appendChild(tile(it,()=>{bC=it.j;renderBuilder();say(compose(bC,bV),0.7);},bC===it.j?'sel':'')));
+  VOWELS.forEach(it=>gv.appendChild(tile(it,()=>{bV=it.j;renderBuilder();say(compose(bC,bV),0.7);},bV===it.j?'sel':'')));
+}
+bListen.onclick=()=>say(compose(bC,bV),0.7);
+
+/* ---------- EXPRESSIONS ---------- */
+const CATS=['Toutes','★ Favoris','Romance','Émotions','Réactions','Relations','Quotidien','Salutations'];
+let cat='Toutes';
+function renderCats(){
+  const c=document.getElementById('cats'); c.innerHTML='';
+  CATS.forEach(x=>{
+    const b=document.createElement('button'); b.className='chip'+(x===cat?' on':''); b.textContent=x;
+    b.onclick=()=>{cat=x;renderCats();renderPhrases();}; c.appendChild(b);
+  });
+}
+function renderPhrases(){
+  const box=document.getElementById('pList'); box.innerHTML='';
+  let list=PHRASES;
+  if(cat==='★ Favoris') list=PHRASES.filter(p=>S.fav.includes(p.k));
+  else if(cat!=='Toutes') list=PHRASES.filter(p=>p.c===cat);
+  if(!list.length){ box.innerHTML='<p class="muted">Aucune expression ici pour l’instant. Touche ☆ pour en ajouter.</p>'; return; }
+  list.forEach(p=>{
+    const row=document.createElement('div'); row.className='phrase';
+    const known=S.known.includes(p.k);
+    row.innerHTML='<button class="icon">🔊</button><div class="t"><div class="k">'+p.k+(known?' <small style="color:var(--ok)">✓</small>':'')+'</div><div class="rr">'+p.r+'</div><div class="ff">'+p.f+'</div>'+(p.n?'<div class="note">'+p.n+'</div>':'')+'</div><button class="star'+(S.fav.includes(p.k)?' on':'')+'">★</button>';
+    row.querySelector('.icon').onclick=()=>{say(p.k);markDay();};
+    row.querySelector('.star').onclick=(e)=>{
+      const i=S.fav.indexOf(p.k); if(i>=0) S.fav.splice(i,1); else S.fav.push(p.k);
+      save(); e.target.classList.toggle('on');
+    };
+    box.appendChild(row);
+  });
+}
+
+/* ---------- QUIZ ---------- */
+const MODES=[
+  {id:'fr',label:'Coréen → Français'},
+  {id:'ear',label:'À l’oreille'},
+  {id:'letters',label:'Lettres'}
+];
+let mode='fr', current=null, answered=false, userTapped=false;
+document.addEventListener('touchend',()=>{userTapped=true;},{once:true});
+document.addEventListener('click',()=>{userTapped=true;},{once:true});
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function renderModes(){
+  const c=document.getElementById('qModes'); c.innerHTML='';
+  MODES.forEach(m=>{
+    const b=document.createElement('button'); b.className='chip'+(m.id===mode?' on':''); b.textContent=m.label;
+    b.onclick=()=>{mode=m.id;renderModes();newQ();}; c.appendChild(b);
+  });
+}
+function newQ(){
+  answered=false; qFb.textContent=''; qNext.style.display='none';
+  qScore.textContent=S.quizTotal?('Score : '+S.quizOk+'/'+S.quizTotal):'';
+  let pool, answerKey, label, prompt, sub, speakText;
+  if(mode==='letters'){
+    pool=VOWELS.concat(CONS); current=pool[Math.floor(Math.random()*pool.length)];
+    prompt=current.j; sub='Comment se prononce cette lettre ?'; speakText=current.s;
+    answerKey=current.r; label=x=>x.r;
+  } else {
+    pool=PHRASES; current=pool[Math.floor(Math.random()*pool.length)];
+    speakText=current.k; answerKey=current.f; label=x=>x.f;
+    if(mode==='ear'){ prompt='🔊'; sub='Écoute et trouve le sens (touche 🔊)'; if(userTapped) say(current.k); }
+    else { prompt=current.k; sub=current.r; }
+  }
+  qPrompt.textContent=prompt; qSub.textContent=sub;
+  qListen.onclick=()=>say(speakText, mode==='letters'?0.7:0.85);
+  const wrong=shuffle(pool.filter(x=>label(x)!==answerKey)).slice(0,3);
+  const opts=shuffle(wrong.concat([current]));
+  qOpts.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=label(o);
+    b.onclick=()=>{
+      if(answered) return; answered=true; S.quizTotal++;
+      const ok=label(o)===answerKey;
+      if(ok){ S.quizOk++; b.classList.add('good'); qFb.style.color='var(--ok)'; qFb.textContent='정답! Bonne réponse 🎉';
+        if(mode!=='letters' && !S.known.includes(current.k)) S.known.push(current.k); }
+      else { b.classList.add('bad'); qFb.style.color='var(--accent)'; qFb.textContent='Presque ! La bonne réponse est en vert.';
+        [...qOpts.children].forEach(x=>{ if(x.textContent===answerKey) x.classList.add('good'); }); }
+      if(mode==='ear'){ qPrompt.textContent=current.k; qSub.textContent=current.r; }
+      markDay(); save(); qScore.textContent='Score : '+S.quizOk+'/'+S.quizTotal; qNext.style.display='block';
+    };
+    qOpts.appendChild(b);
+  });
+}
+qNext.onclick=newQ;
+
+/* ---------- PARLER ---------- */
+let spIdx=Math.floor(Math.random()*PHRASES.length);
+function renderSpeak(){
+  const p=PHRASES[spIdx];
+  spKo.textContent=p.k; spRo.textContent=p.r; spFr.textContent=p.f;
+  spFb.textContent=''; spHeard.textContent='';
+}
+function norm(s){ return (s||'').replace(/[\s?!.,~]/g,''); }
+function similarity(a,b){
+  a=norm(a); b=norm(b); if(!a||!b) return 0;
+  const dp=Array.from({length:a.length+1},(_,i)=>[i]);
+  for(let j=1;j<=b.length;j++) dp[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++)
+    dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return 1-dp[a.length][b.length]/Math.max(a.length,b.length);
+}
+spListen.onclick=()=>say(PHRASES[spIdx].k,0.65);
+spNext.onclick=()=>{ spIdx=(spIdx+1+Math.floor(Math.random()*(PHRASES.length-1)))%PHRASES.length; renderSpeak(); };
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){
+  spMic.disabled=true; spMic.style.opacity=.4;
+  spInfo.innerHTML='🎙️ Ce navigateur ne gère pas la reconnaissance vocale. Sur iPhone, ouvre la page dans <b>Safari</b>. En attendant, écoute et répète quand même à voix haute !';
+} else {
+  spMic.onclick=()=>{
+    const rec=new SR(); rec.lang='ko-KR'; rec.interimResults=false; rec.maxAlternatives=3;
+    spMic.classList.add('listening'); spFb.textContent='Je t’écoute…'; spFb.style.color='var(--muted)'; spHeard.textContent='';
+    rec.onresult=(e)=>{
+      const target=PHRASES[spIdx].k; let best=0, heard='';
+      for(const alt of e.results[0]){ const s=similarity(alt.transcript,target); if(s>best){best=s;heard=alt.transcript;} }
+      spHeard.textContent='Entendu : '+heard;
+      if(best>=0.85){ spFb.style.color='var(--ok)'; spFb.textContent='완벽해요! Parfait 🎉'; if(!S.known.includes(target)) S.known.push(target); }
+      else if(best>=0.5){ spFb.style.color='#d98a00'; spFb.textContent='Pas mal ! Réécoute et réessaie.'; }
+      else { spFb.style.color='var(--accent)'; spFb.textContent='Pas encore… écoute la version lente 🔊'; }
+      markDay(); save();
+    };
+    rec.onerror=(e)=>{ spFb.style.color='var(--accent)'; spFb.textContent=e.error==='not-allowed'?'Micro refusé : autorise-le dans ton navigateur.':'Je n’ai rien entendu, réessaie.'; };
+    rec.onend=()=>spMic.classList.remove('listening');
+    rec.start();
+  };
+}
+
+/* ---------- INIT ---------- */
+(function(){
+  const h=new Date().getHours();
+  document.getElementById('hello').textContent=(h<18?'안녕하세요 !':'좋은 저녁이에요 !')+' Tes dramas sans sous-titres';
+})();
+(function(){
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  const standalone=window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+  if(ios && !standalone) document.getElementById('installTip').style.display='block';
+})();
+renderHome(); renderLetters(); renderBuilder(); renderCats(); renderPhrases(); renderModes(); newQ(); renderSpeak();
+</script>
+</body>
+</html>
